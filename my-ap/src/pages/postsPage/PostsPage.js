@@ -1,19 +1,20 @@
 import React, {useEffect} from 'react';
 import {Table} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
-import {getPost} from "../../store/fetchSlice";
+import {getOnePostById, getPost} from "../../store/fetchSlice";
 
 function PostsPage() {
     const dispatch = useDispatch();
     const posts = useSelector(state => state.fetchReducer.posts);
+    const poster = useSelector(state => state.fetchReducer.post)
 
     useEffect(() => {
         dispatch(getPost())
     }, [])
-
     const getOnePost = (e) => {
         e.preventDefault()
-        console.log(e.target.dataset.id)
+        // console.log(e.target.dataset.id)
+        dispatch(getOnePostById(e.target.dataset.id))
     }
 
     return (
@@ -29,8 +30,8 @@ function PostsPage() {
                 </tr>
                 </thead>
                 <tbody>
-                {posts.slice(0, 10).map(post =>
-                    <tr>
+                {poster.map(post =>
+                    <tr key={post.id}>
                         <td>{post.id}</td>
                         <td>{post.title}</td>
                         <td>{post.body}</td>
@@ -42,11 +43,6 @@ function PostsPage() {
                     </tr>)}
                 </tbody>
             </Table>
-
-            <ul>
-                <li>title: dasd</li>
-                <li>body: asdasd</li>
-            </ul>
         </div>
     );
 }

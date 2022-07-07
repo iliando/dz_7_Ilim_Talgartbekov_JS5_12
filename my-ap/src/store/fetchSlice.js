@@ -29,6 +29,14 @@ export const getPost = createAsyncThunk(
         dispatch(getPostsAction(posts))
     }
 )
+export const getOnePost = createAsyncThunk(
+    'getOnePost',
+    async (data, {dispatch}) => {
+        const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${+data}`)
+        const pos = await  res.json()
+        dispatch(getOnePostById(pos))
+}
+)
 
 const fetchSlice = createSlice({
     name: "fetchSlice",
@@ -42,9 +50,12 @@ const fetchSlice = createSlice({
     reducers: {
         getPostsAction(state, action) {
             state.posts = action.payload
+        },
+        getOnePostById(state, action){
+            state.post = action.payload
         }
     }
 })
 
-export const {getPostsAction} = fetchSlice.actions;
+export const {getPostsAction, getOnePostById} = fetchSlice.actions;
 export default fetchSlice.reducer
